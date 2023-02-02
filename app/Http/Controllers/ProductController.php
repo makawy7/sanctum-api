@@ -11,26 +11,31 @@ class ProductController extends Controller
     {
         return response(Product::all(), 200);
     }
-    public function show()
+    public function show(Product $product)
     {
-        return '0000000000';
+        return $product;
     }
     public function store(Request $request)
     {
         $attributes = $request->validate([
             'name' => 'required|string|min:6',
-            'price' => 'required',
+            'price' => 'required|numeric',
             'description' => 'required'
         ]);
-        Product::create($attributes);
+        return Product::create($attributes);
     }
 
-    public function update()
+    public function update(Request $request, Product $product)
     {
-        return '0000000000';
+        $attributes = $request->validate([
+            'name' => 'sometimes|string|min:6',
+            'price' => 'sometimes|numeric',
+        ]);
+        $product->update($attributes);
+        return $product;
     }
-    public function destroy()
+    public function destroy(Product $product)
     {
-        return '0000000000';
+        return $product->delete();
     }
 }

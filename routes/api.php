@@ -20,7 +20,7 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/product/{product}', 'show');
     Route::post('/product', 'store');
     Route::put('/product/{product}', 'update');
-    Route::delete('/product', 'destroy');
+    Route::delete('/product/{product}', 'destroy');
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
