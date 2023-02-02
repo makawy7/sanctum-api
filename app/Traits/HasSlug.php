@@ -8,7 +8,19 @@ trait HasSlug
     {
         parent::boot();
         static::creating(function ($query) {
-            $query->slug = str_replace(' ', '-', $query->name);
+            $slug = preg_replace('/[ ,]+/', '-', trim($query->name));
+            $query->slug = self::uniqueAssert($slug);
         });
+    }
+    private static function uniqueAssert($slug, $counter = 1)
+    {
+        $newSlug = parent::where('slug', $slug)->exists() ? $slug . '-' . $counter : $slug;
+        if (parent::where('slug', $newSlug)->exists()) {
+            // if it still exists regenerate
+            $counter += 1;
+            return self::uniqueAssert($slug, $counter);
+        } else {
+            return $newSlug;
+        }
     }
 }
